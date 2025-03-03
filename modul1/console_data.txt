@@ -1,0 +1,16 @@
+True and True
+True
+True and 1
+1
+True and 'a'
+'a'
+True and ''
+''
+bool('')
+False
+bool('a')
+True
+bool('0')
+True
+bool('asjdfjasd;')
+True
