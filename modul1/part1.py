@@ -177,15 +177,41 @@
 #     print('did not find number 3')
 #
 
-count = 1
-while count <= 5:
-    password = input('Password: ')
-    print(count)
-    if password == 'my_password':
-        count += 1
-    else:
-        continue
-    print(password)
+# count = 1
+# while count <= 5:
+#     password = input('Password: ')
+#     print(count)
+#     if password == 'my_password':
+#         count += 1
+#     else:
+#         continue
+#     print(password)
 
 
 # 7780 - print login success
+
+# def greet(name, greeting="Hello"):
+#     return f"{greeting}, {name}!"
+#
+# print(greet("Alice"))
+# print(greet("Bob", "Hi"))
+
+result = ''
+def greet(*args, **kwargs):
+    global result
+    print(f'all kw args: {kwargs}')
+    for name in args:
+        result += f"{kwargs['greeting']}, {name}!\n"
+    # return result
+
+print('Before:', result)
+
+print(greet("Alice", greeting='Hello',  name='Alice'))
+print(greet("Bob", 'Jim', 'Tomas', greeting="Hi"))
+
+print('response from print is: ', print('After:', result))
+
+# numbers = []
+# for number in numbers.copy():
+#     pass
+# print(number)
