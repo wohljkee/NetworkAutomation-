@@ -125,9 +125,53 @@
 #     print(number, end='\t')
 # print(numbers)
 
-numbers = [1, 2, 3, 4, 5]
+# numbers = [1, 2, 3, 4, 5]
+# for number in numbers.copy():
+#     if number == 3:
+#         numbers.remove(number)
+#     print(number, end='\t')
+# print(numbers)
+
+# letters = 'abcde'
+# for letter in letters:
+#     if letter == 'c':
+#         letters = letters.replace('c', '')
+#     print(letter, end='\t')
+# print(letters)
+
+# numbers = [1, 2, 3, 4, 5]
+# for number in numbers.copy():
+#     if number == 3:
+#         continue
+#     print(number, end='\t')
+# print(numbers)
+
+# numbers = [1, 2, 3, 4, 5]
+# for number in numbers.copy():
+#     if number == 3:
+#         break
+#     print(number, end='\t')
+# print(numbers)
+
+# letters = 'abcde'
+# for letter in letters:
+#     if letter == 'c':
+#         break
+#     print(letter, end='\t')
+# print(letters)
+
+# numbers = [1, 2, 3, 4, 5]
+# for number in numbers.copy():
+#     if number == 3:
+#         continue
+#     print(number, end='\t')
+# else:
+#     print('done')
+
+numbers = [1, 2, 4, 5, 3]
 for number in numbers.copy():
     if number == 3:
-        numbers.remove(number)
+        break
     print(number, end='\t')
-print(numbers)
+else:
+    print('did not find number 3')
