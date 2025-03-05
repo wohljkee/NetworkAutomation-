@@ -168,10 +168,24 @@
 # else:
 #     print('done')
 
-numbers = [1, 2, 4, 5, 3]
-for number in numbers.copy():
-    if number == 3:
-        break
-    print(number, end='\t')
-else:
-    print('did not find number 3')
+# numbers = [1, 2, 4, 5, 3]
+# for number in numbers.copy():
+#     if number == 3:
+#         break
+#     print(number, end='\t')
+# else:
+#     print('did not find number 3')
+#
+
+count = 1
+while count <= 5:
+    password = input('Password: ')
+    print(count)
+    if password == 'my_password':
+        count += 1
+    else:
+        continue
+    print(password)
+
+
+# 7780 - print login success
