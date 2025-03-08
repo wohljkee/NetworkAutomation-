@@ -22,7 +22,7 @@ for each port of a switch and return a dictionary as in the example below:
    - user will provide vlans as "100,200,300"
    - user will be asked to add more vlans or press q
  - if no more vlans are provided user will be asked to provide additional port or press 'q'
- - if no more ports are provided user will be asked ro provide additional port or press 'q'
+ - if no more ports are provided user will be asked ro provide additional switch or press 'q'
 
 ## Checks:
  - make sure that vlans do not repeat for port - hint: set()
