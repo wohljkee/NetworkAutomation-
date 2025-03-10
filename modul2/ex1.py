@@ -6,6 +6,16 @@ def show_menu():
     print("5. Snack                 ...5lei")
     print("6. Meniu sandwich +cola  ...11lei")
 
+
 while True:
     show_menu()
     choice = input("Enter your choice: ")
+
+    if choice == 'x':
+        break
+
+    try:
+        selection = int(choice)
+    except ValueError:
+        print("Invalid choice, please try again")
+        continue
