@@ -46,14 +46,15 @@ while True:
 
         for i in range(3):
             if remaining_price > 0:
-
                 more_money = input("give more money")
                 try:
                     more_money = int(more_money)
                 except ValueError:
                     print("\nIncorrect money, please try again")
                     continue
-
+                if more_money not in valid_mony:
+                    print("\nIncorrect money, please try again")
+                    continue
                 remaining_price = remaining_price - more_money
             else:
                 break
@@ -61,3 +62,7 @@ while True:
             print(f'Retuning all money: {beverages[selection]["price"] - remaining_price}')
         if remaining_price < 0:
             print(f'se va returna {-remaining_price}')
+
+        print(f'Returning product: {beverages[selection]["name"]}')
+    else:
+        print(f'Retuning all money: {money}')
