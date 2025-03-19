@@ -1,0 +1,1 @@
+# get ifname and ip address from: # ip addr show

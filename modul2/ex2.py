@@ -1,0 +1,1 @@
+# get cpu family from : # wmic cpu get
