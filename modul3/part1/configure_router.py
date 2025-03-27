@@ -9,6 +9,7 @@ time.sleep(3)
 out = te.read_very_eager()
 if b'(config)' in out:
     te.write(b'exit')
+te.expect([b"IOU1#"])
 te.write(b"conf t\n")
 te.expect([b"IOU1\(config\)#"])
 te.write(b"int eth0/0\n")
