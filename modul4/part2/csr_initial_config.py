@@ -45,7 +45,7 @@ async def configure_csr_device(address: str, port: int, user: str, password: str
             time.sleep(60)
             t_writer.write('\n')
             try:
-                await asyncio.wait_for(t_reader.readuntil(hostname.encode()), timeout=10)
+                await asyncio.wait_for(t_reader.readuntil(hostname), timeout=10)
             except asyncio.TimeoutError:
                 continue
     elif b'Router>' in response:
