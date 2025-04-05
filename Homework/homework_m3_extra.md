@@ -2,7 +2,7 @@
 
 1) Create script to configure all ports of the connected routed with
 
-    - set ip addresses from 192.168.101.1/24 to 192.168.104.1/24 for ports Ethernet0/1 to Ethernet0/4
+    - set ip addresses from 192.168.101.1/24 to 192.168.104.1/24 for ports Ethernet0/1 to Ethernet1/0
     - enable dhcp for interface eht0/1 with:
         - pool 192.168.101.100-192.168.101.200
         - gateway 192.168.101.1
