@@ -31,7 +31,7 @@ def my_print(port, queue):
     c.write(b'\n')
     time.sleep(3)
     out = c.read_very_eager()
-    queue.put(out)
+    queue.put((out, port))
     return 'Process {}'.format(os.getpid()), c
 
 
