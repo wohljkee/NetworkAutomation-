@@ -7,3 +7,9 @@ from pyats.topology import loader
 #
 # print(out)
 
+tb = loader.load('testbed_example.yaml')
+dev = tb.devices['IOU1']
+conn = dev.connections.ssh
+print(conn)
+
+print(conn)
