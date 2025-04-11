@@ -6,33 +6,38 @@ devices:
     os: "ios"
     type: "IOU"
     connections:
-      ssh:
-        protocol: "ssh"
-        ip: "192.168.11.1"
-        port: 22
-#        credentials:
-#          username: admin
-#          password: cisco
+      telnet:
         class: telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5022
+      ssh:
+        class: ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.11.1
+        port: 22
+        username: admin
+        password: Cisco!23
 
-    credentials:
-      defaults:
-        username: "admin"
-        password: "cisco"
 
   Router:
     os: "iosxe"
     type: "Router"
     connections:
+      telnet:
+        class: telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5023
+        username: admin
+        password: Cisco!23
       ssh:
-        protocol: "ssh"
-        ip: "192.168.102.2"
+        class: ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.102.2
         port: 22
-
-    credentials:
-      defaults:
-        username: "admin"
-        password: "Cisco!12"
+        username: admin
+        password: Cisco!23
 
 topology:
 
