@@ -1,7 +1,7 @@
 from pyats import aetest
 from pyats.topology import loader
 
-from modul5.telnet_connector import TelnetConnector
+from modul5.part2.telnet_connector import TelnetConnector
 
 tb = loader.load('testbed_example.yaml')
 
