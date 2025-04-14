@@ -35,6 +35,20 @@ class Example(aetest.Testcase):
         e.open()
         response = e.get_interfaces()
         print(response)
+        config = e.get_config()
+        with open('config.cfg', 'w') as file:
+            file.write(config['startup'])
+        # do changes to config
+        with open('config.cfg', 'r') as file:
+            modified_config = file.read()
+
+        e.load_merge_candidate(config='''interface Ethernet0/1
+ ip address 192.168.102.1 255.255.255.0
+        ''')
+        e.replace_merge_candidate(config=modified_config)
+
+        save = e.commit_config()
+        print(config)
 
 
 
