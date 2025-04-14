@@ -1,0 +1,81 @@
+testbed:
+  name: NetworkAutomation
+
+devices:
+  IOU1:
+    os: ios
+    type: router
+    custom:
+      hostname: em-r1
+    connections:
+      telnet:
+        class: telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5022 # replaces with yours
+      ssh:
+        class: ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.11.1
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+      napalm:
+        class: napalm
+        protocol: napalm
+        ip: 192.168.11.1
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+
+  Router:
+    os: iosxe
+    type: router
+    custom:
+      hostname: em-r2
+    connections:
+      telnet:
+        class: telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5023 # replaces with yours
+      ssh:
+        class: ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.102.2
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+
+topology:
+  IOU1:
+    interfaces:
+      Ethernet0/0:
+        alias: initial
+        type: ethernet
+        link: ubuntu
+        ipv4: 192.168.11.1/24
+      Ethernet0/1:
+        type: ethernet
+        link: docker
+        ipv4: 192.168.101.1/24
+      Ethernet0/2:
+        type: ethernet
+        link: csr
+        ipv4: 192.168.102.1/24
+
+  Router:
+    interfaces:
+      Ethernet1:
+        alias: initial
+        type: ethernet
+        link: csr
+        ipv4: 192.168.102.2/24
+
+ 

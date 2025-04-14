@@ -16,6 +16,10 @@ class Example(aetest.Testcase):
         conn.do_initial_configuration()
         conn.disconnect()
 
+    def use_napalm(self):
+        pass
+
+
 
 if __name__ == '__main__':
     aetest.main()
