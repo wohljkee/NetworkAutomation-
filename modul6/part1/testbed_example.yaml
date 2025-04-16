@@ -32,7 +32,7 @@ devices:
             username: admin
             password: Cisco!23
 
-  Router:
+  CSR:
     os: iosxe
     type: router
     custom:
@@ -53,6 +53,37 @@ devices:
             username: admin
             password: Cisco!23
 
+  IOSv:
+    os: ios
+    type: router
+    custom:
+      hostname: IOSv15
+    connections:
+      telnet:
+        class: telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5019 # replaces with yours
+      ssh:
+        protocol: ssh
+        ip: 192.168.103.2 #ip IOU1
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+
+  FTD:
+    os: ftd
+    type: ftd
+    custom:
+      hostname: FTD
+    connections:
+      ssh:
+        protocol: ssh
+        ip: 192.168.45.45 # replaces with yours
+        port: 5021 # replaces with yours
+
 topology:
   IOU1:
     interfaces:
@@ -70,12 +101,61 @@ topology:
         link: csr
         ipv4: 192.168.102.1/24
 
-  Router:
+  CSR:
     interfaces:
-      Ethernet1:
+      GigabitEthernet1:
         alias: initial
         type: ethernet
         link: csr
         ipv4: 192.168.102.2/24
+      GigabitEthernet2:
+        type: ethernet
+        alias: to_DockerGuest1
+        link: link-docker1
+        ipv4: 192.168.105.1/24
+      GigabitEthernet3:
+        type: ethernet
+        alias: to_FTD
+        link: link-ftd3
+        ipv4: 192.168.106.1/24
 
- 
+  IOSv:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet
+        alias: initial
+        link: link-ios15
+        ipv4: 192.168.103.2/24
+      GigabitEthernet0/1:
+        type: ethernet
+        alias: to_FTD
+        link: link-ftd2
+        ipv4: 192.168.107.1/24
+      GigabitEthernet0/2:
+        type: ethernet
+        alias: to_DNS
+        link: link-dns
+        ipv4: 192.168.108.1/24
+
+  FTD:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet
+        alias: to_IOU1
+        link: link-ftd1
+        ipv4: 192.168.104.2/24
+      GigabitEthernet0/1:
+        type: ethernet
+        alias: to_IOSv15
+        link: link-ftd2
+        ipv4: 192.168.107.2/24
+      GigabitEthernet0/2:
+        type: ethernet
+        alias: to_DockerGuest2
+        link: link-docker2
+        ipv4: 192.168.109.1/24
+      GigabitEthernet0/3:
+        type: ethernet
+        alias: to_CSR
+        link: link-ftd3
+        ipv4: 192.168.106.2/24

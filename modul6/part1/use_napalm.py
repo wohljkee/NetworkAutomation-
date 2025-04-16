@@ -54,3 +54,4 @@ class Example(aetest.Testcase):
 
 if __name__ == '__main__':
     aetest.main()
+yang.connector.Netconf
