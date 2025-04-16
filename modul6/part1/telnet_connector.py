@@ -3,6 +3,7 @@ from typing import Optional
 
 from pyats.datastructures import AttrDict
 from pyats.topology import Device
+from unicon.plugins.asa.statements import enable_password
 
 
 class TelnetConnector:
@@ -56,7 +57,9 @@ class TelnetConnector:
 
         # configure SCP server for napalm
         self.execute('ip scp server enable', prompt=[r'\(config\)#'])
-
+        enable_password = self.device.credentials.enable.password.plaintextif
+        if self.device.platform == 'iosv':
+            self.execute(f'enable secret {enable_password}', prompt=[r'\(config\)#'])
         # save configuration
         self.execute('end', prompt=[rf'{hostname}#'])
         self.execute('write', prompt=[rf'\[confirm\]|{hostname}#'])

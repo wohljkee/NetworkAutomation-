@@ -58,6 +58,9 @@ devices:
     type: router
     custom:
       hostname: IOSv15
+    credentials:
+      enable:
+        password: Cisco!2345
     connections:
       telnet:
         class: telnet_connector.TelnetConnector
