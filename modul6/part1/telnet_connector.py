@@ -19,13 +19,18 @@ class TelnetConnector:
             port=self.connection.port
         )
 
+    def enable_rest(self):
+        self.execute('conf t', prompt=[r'\(config\)#'])
+        self.execute("ip http secure-server", prompt=[r'\(config\)#'])
+        self.execute('#restconf', prompt=[r'\(config\)#'])
+
     def do_initial_configuration(self):
         # configure IOU and IOSv
         if self.device.os == 'ios':
             self._initial_conf_ios()
 
         # configure CSR Router
-        elif self.device.os == 'iosexe':
+        elif self.device.os == 'iosxe':
             self._initial_conf_csr()
 
     def _initial_conf_ios(self):

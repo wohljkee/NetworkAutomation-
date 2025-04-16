@@ -9,12 +9,12 @@ devices:
       hostname: em-r1
     connections:
       telnet:
-        class: telnet_connector.TelnetConnector
+        class: modul6.part1.telnet_connector.TelnetConnector
         protocol: telnet
         ip: 192.168.0.100
         port: 5022 # replaces with yours
       ssh:
-        class: ssh_connector.SSHConnector
+        class: modul6.part1.ssh_connector.SSHConnector
         protocol: ssh
         ip: 192.168.11.1
         port: 22
@@ -39,12 +39,12 @@ devices:
       hostname: em-r2
     connections:
       telnet:
-        class: telnet_connector.TelnetConnector
+        class: modul6.part1.telnet_connector.TelnetConnector
         protocol: telnet
         ip: 192.168.0.100
-        port: 5023 # replaces with yours
+        port: 5053 # replaces with yours
       ssh:
-        class: ssh_connector.SSHConnector
+        class: modul6.part1.ssh_connector.SSHConnector
         protocol: ssh
         ip: 192.168.102.2
         port: 22
@@ -52,11 +52,6 @@ devices:
           login:
             username: admin
             password: Cisco!23
-      rest:
-#        class: ssh_connector.SSHConnector # your rest class (web)
-        protocol: https
-        ip: 192.168.102.2
-        port: 443
 
   IOSv:
     os: ios
@@ -68,7 +63,7 @@ devices:
         password: Cisco!2345
     connections:
       telnet:
-        class: telnet_connector.TelnetConnector
+        class: modul6.part1.telnet_connector.TelnetConnector
         protocol: telnet
         ip: 192.168.0.100
         port: 5019 # replaces with yours
