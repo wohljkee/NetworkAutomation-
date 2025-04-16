@@ -3,7 +3,6 @@ from typing import Optional
 
 from pyats.datastructures import AttrDict
 from pyats.topology import Device
-from unicon.plugins.asa.statements import enable_password
 
 
 class TelnetConnector:
