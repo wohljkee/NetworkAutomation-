@@ -45,7 +45,7 @@ class Example(aetest.Testcase):
         e.load_merge_candidate(config='''interface Ethernet0/1
  ip address 192.168.102.1 255.255.255.0
         ''')
-        e.replace_merge_candidate(config=modified_config)
+        # e.load_merge_candidate(config=modified_config)
 
         save = e.commit_config()
         print(config)
