@@ -1,7 +1,7 @@
 from pyats import aetest
 from pyats.topology import loader
 
-tb = loader.load('modul6/part1/testbed_example.yaml')
+tb = loader.load('testbed_example.yaml')
 
 
 class Example(aetest.Testcase):

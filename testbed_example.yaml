@@ -39,7 +39,14 @@ devices:
       hostname: em-r2
     connections:
       rest:
-        class: lib.telnet_connector.TelnetConnector
+        class: lib.rest_connector.RESTConnector
+        protocol: https
+        port: 443
+        ip: 192.168.102.2
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
       telnet:
         class: modul6.part1.telnet_connector.TelnetConnector
         protocol: telnet
