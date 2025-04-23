@@ -14,6 +14,7 @@ class RESTConnector:
         self._session = None
         self._auth = None
         self._headers = None
+        self._url = None
         self.device = device
         self.connection: Optional[AttrDict] = None
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -28,8 +29,8 @@ class RESTConnector:
         self._url = f'https://{self.connection.ip.compressed}:{self.connection.port}'
 
     def get_interface(self, interface_name: str) -> Optional[AttrDict]:
-        endpoint=f'/restconf/data/ietf-interfaces:interfaces/interface={interface_name}'
-        url=self._url+endpoint
+        endpoint = f'/restconf/data/ietf-interfaces:interfaces/interface={interface_name}'
+        url = self._url + endpoint
         response = requests.get(url, auth=self._auth, headers=self._headers, verify=False)
         return response.json()
 

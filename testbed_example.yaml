@@ -38,6 +38,8 @@ devices:
     custom:
       hostname: em-r2
     connections:
+      rest:
+        class: lib.telnet_connector.TelnetConnector
       telnet:
         class: modul6.part1.telnet_connector.TelnetConnector
         protocol: telnet
