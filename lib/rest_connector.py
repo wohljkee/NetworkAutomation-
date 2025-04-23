@@ -34,6 +34,24 @@ class RESTConnector:
         response = requests.get(url, auth=self._auth, headers=self._headers, verify=False)
         return response.json()
 
+    def get_netconf_capabilities(self):
+        netconf = f'/restconf/data/netconf-state/capabilities'
+        url = self._url + netconf
+        response = requests.get(url, auth=self._auth, headers=self._headers, verify=False)
+        self.netconf_capabilities = response.json().get(
+            'ietf-netconf-monitoring:capabilities', {}
+        ).get('capability', [])
+
+    def get_restconf_capabilities(self):
+        restconf = f'/restconf/data/ietf-yang-library:modules-state'
+        url = self._url + restconf
+        response = requests.get(url, auth=self._auth, headers=self._headers, verify=False)
+        self.resconf_capabilities = self.__extract_endpoints(response.json())
+
+    def __extract_endpoints(self, response):
+        # your code here
+        pass
+
     def disconnect(self):
         pass
 
