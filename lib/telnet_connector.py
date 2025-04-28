@@ -110,6 +110,24 @@ class TelnetConnector:
         self.execute('write memory', prompt=[rf'\[OK\]|{hostname}#'])
         self.execute('', prompt=[rf'{hostname}#'])
 
+    def _initial_config_ftd(self):
+        self.execute('\n', prompt=[r'firepower login:'])
+        self.execute('admin', prompt=[r'Password:'])
+        self.execute('Admin123', prompt=[r'to display the EULA'])
+        while '--More--':
+            # space new line
+
+            self.execute('\n', prompt=[r'to AGREE to the EULA'])
+            self.execute('\n', prompt=[r'Enter new password:'])
+        password = self.device.connections.ssh.credentials.login.password.plaintext
+        self.execute(password, prompt=[r'Confirm new password:'])
+        self.execute(password, prompt=[r'IPv4\? \(y/n\) \[y\]:'])
+
+
+
+        # configure interface
+        interface = self.device.interfaces['initial']
+
     def disconnect(self):
         self._conn.close()
 

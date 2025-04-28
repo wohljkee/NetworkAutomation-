@@ -90,11 +90,24 @@ devices:
     type: ftd
     custom:
       hostname: FTD
+      dns: 192.168.106.2
     connections:
+      telnet:
+        prtocol: telnet
+        ip: 192.168.0.100
+        port: 5078
+        credentials:
+          login:
+            username: admin
+            password: Admin123
       ssh:
         protocol: ssh
-        ip: 192.168.45.45 # replaces with yours
-        port: 5021 # replaces with yours
+        ip: 192.168.103.2
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco@135
 
 topology:
   IOU1:
