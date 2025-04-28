@@ -17,6 +17,10 @@ class Example(aetest.Testcase):
         conn_class.connect(connection=conn, username=username, password=password)
         out = conn_class.get_interface('GigabitEthernet1')
         conn_class.get_restconf_capabilities()
+        conn_class.get_restconf_capabilities()
+        for api in conn_class.api_endpoints:
+            if 'interfaces' in api:
+                print(api)
         print(out)
 
 

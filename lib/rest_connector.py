@@ -17,6 +17,7 @@ class RESTConnector:
         self._url = None
         self.device = device
         self.connection: Optional[AttrDict] = None
+        self.api_endpoints: list[str] = None
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     def connect(self, **kwargs):
@@ -49,8 +50,12 @@ class RESTConnector:
         self.resconf_capabilities = self.__extract_endpoints(response.json())
 
     def __extract_endpoints(self, response):
-        # your code here
-        pass
+        self.api_endpoints = []
+        for key, value in response.get('ietf-yang-library:modules-state', []).items():
+            if key != 'module':
+                continue
+            for endpoint in value:
+                self.api_endpoints.append(endpoint.get('schema'))
 
     def disconnect(self):
         pass
