@@ -49,6 +49,11 @@ class RESTConnector:
         response = requests.get(url, auth=self._auth, headers=self._headers, verify=False)
         self.resconf_capabilities = self.__extract_endpoints(response.json())
 
+    def get_api_endpoint(self, url):
+        response = requests.get(url, auth=self._auth, headers=self._headers, verify=False)
+        with open(f"{url.split('/')[-2]}.yang", 'w') as file:
+            file.write(response.text)
+
     def __extract_endpoints(self, response):
         self.api_endpoints = []
         for key, value in response.get('ietf-yang-library:modules-state', []).items():

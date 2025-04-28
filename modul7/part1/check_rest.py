@@ -20,8 +20,7 @@ class Example(aetest.Testcase):
         conn_class.get_restconf_capabilities()
         for api in conn_class.api_endpoints:
             if 'interfaces' in api:
-                print(api)
-        print(out)
+                conn_class.get_api_endpoint(api)
 
 
 if __name__ == '__main__':
