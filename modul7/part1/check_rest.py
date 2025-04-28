@@ -18,9 +18,8 @@ class Example(aetest.Testcase):
         out = conn_class.get_interface('GigabitEthernet1')
         conn_class.get_restconf_capabilities()
         conn_class.get_restconf_capabilities()
-        for api in conn_class.api_endpoints:
-            if 'interfaces' in api:
-                conn_class.get_api_endpoint(api)
+        for api in conn_class.api_endpoints.copy():
+            conn_class.get_api_endpoint(api)
 
 
 if __name__ == '__main__':
