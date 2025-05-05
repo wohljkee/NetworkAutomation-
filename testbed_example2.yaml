@@ -1,0 +1,37 @@
+testbed:
+  name: NetworkAutomation
+
+devices:
+  em-r2:
+    os: iosxe
+    type: router
+    platform: csr1000v
+    connections:
+      cli:
+        protocol: ssh
+        port: 22
+        ip: 192.168.102.2
+        credentials:
+          default:
+            username: admin
+            password: Cisco!23
+
+topology:
+  em-r2:
+    interfaces:
+      GigabitEthernet1:
+        alias: initial
+        type: ethernet
+        link: csr
+        ipv4: 192.168.102.2/24
+      GigabitEthernet2:
+        type: ethernet
+        alias: to_DockerGuest1
+        link: link-docker1
+        ipv4: 192.168.105.1/24
+      GigabitEthernet3:
+        type: ethernet
+        alias: to_FTD
+        link: link-ftd3
+        ipv4: 192.168.106.1/24
+
