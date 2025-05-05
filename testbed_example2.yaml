@@ -16,6 +16,22 @@ devices:
             username: admin
             password: Cisco!23
 
+  IOSv15:
+    os: ios
+    type: router
+    credentials:
+      enable:
+        password: Cisco!2345
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.103.2
+        port: 22
+        credentials:
+          default:
+            username: admin
+            password: Cisco!23
+
 topology:
   em-r2:
     interfaces:
@@ -35,3 +51,20 @@ topology:
         link: link-ftd3
         ipv4: 192.168.106.1/24
 
+  IOSv15:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet
+        alias: initial
+        link: link-ios15
+        ipv4: 192.168.103.2/24
+      GigabitEthernet0/1:
+        type: ethernet
+        alias: to_FTD
+        link: link-ftd2
+        ipv4: 192.168.107.1/24
+      GigabitEthernet0/2:
+        type: ethernet
+        alias: to_DNS
+        link: link-dns
+        ipv4: 192.168.108.1/24
