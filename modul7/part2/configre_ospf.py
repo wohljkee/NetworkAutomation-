@@ -1,7 +1,8 @@
+"""Added docstrings for module"""
 import ipaddress
 
 from pyats import aetest
-from pyats.aetest.steps import Steps, Step
+from pyats.aetest.steps import Steps, Step  # pylint: disable=unused-import
 from pyats.topology import loader
 from genie.libs.conf.ospf.ospf import Ospf
 from genie.libs.conf.interface.iosxe import Interface
@@ -12,9 +13,11 @@ device_iosv = tb.devices['IOSv15']
 
 
 class Example(aetest.Testcase):
+    """This is docstring for class"""
 
     @aetest.test
     def configure_ospf_csr(self, steps: Steps):
+        """This is docstring for method"""
         with steps.start('Connect to device'):
             device_csr.connect(log_stdout=True)
 
