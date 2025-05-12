@@ -125,6 +125,10 @@ topology:
         type: ethernet
         link: csr
         ipv4: 192.168.102.1/24
+      Ethernet0/3:
+        type: ethernet
+        link: ftd_mgmt
+        ipv4: 192.168.110.1/24
 
   CSR:
     interfaces:
@@ -164,6 +168,11 @@ topology:
 
   FTD:
     interfaces:
+      Management0/0:
+        type: ethernet
+        alias: mgmt
+        link: ftd_mgmt
+        ipv4: 192.168.110.2/24
       GigabitEthernet0/0:
         type: ethernet
         alias: to_IOU1

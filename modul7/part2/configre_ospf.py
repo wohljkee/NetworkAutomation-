@@ -64,15 +64,27 @@ class Example2(aetest.Testcase):
             config = ospf.build_config(devices=[device_iosv])
             print(config)
 
-        with steps.start('configure DHCP on IOSv'):
-            example = """
-ip dhcp excluded-address 192.168.10.1 192.168.10.
-ip dhcp pool LAN_POOL
- network 192.168.10.0 255.255.255.0
- default-router 192.168.10.1
- dns-server 192.168.103.3
+            with steps.start('configure DHCP on IOSv'):
+                dhcp_template = """
+ip dhcp excluded-address {device_interface}
+ip dhcp pool {dhcp_pool_name}
+ network {network} {mask}
+ default-router {gateway}
+ dns-server {dns_server}
  lease 0 12
-"""
+        """
+                intf_name = 'to_DNS'
+                intf = device_iosv.interfaces[intf_name]
+                iosv_conf = dhcp_template.format(
+                    device_interface=intf.ipv4.ip.compressed,
+                    dhcp_pool_name=device_iosv.custom.get('dhcp_pool_name'),
+                    network=intf.ipv4.network.network_address.compressed,
+                    mask=intf.ipv4.netmask.compressed,
+                    gateway=intf.ipv4.ip.compressed,
+                    dns_server=device_iosv.custom.get('dns_server')
+                )
+
+                device_iosv.configure(iosv_conf)
 
 
 
