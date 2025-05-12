@@ -6,6 +6,7 @@ from pyats.aetest.steps import Steps, Step  # pylint: disable=unused-import
 from pyats.topology import loader
 from genie.libs.conf.ospf.ospf import Ospf
 from genie.libs.conf.interface.iosxe import Interface
+# from genie.libs.conf.device import Device
 
 tb = loader.load('testbed_example2.yaml')
 device_csr = tb.devices['em-r2']
@@ -53,14 +54,26 @@ class Example2(aetest.Testcase):
             config = int_f.build_config(apply=False)
             device_iosv.configure(config.cli_config.data)
 
-        # with steps.start('Configure OSPF on IOSV'):
-        #     ospf = Ospf()
-        #     ospf.device_attr[device_iosv].vrf_attr['default'].instance = '1'
-        #     ospf.device_attr[device_iosv].vrf_attr['default'].router_id = '192.168.103.2'
-        #     area = ospf.device_attr[device_iosv].vrf_attr['default'].area_attr[0]
-        #     area.area = 0
-        #     # area.networks.append('192.168.107.0 0.0.0.255')
-        #     ospf.build_config(devices=[device_iosv])
+        with steps.start('Configure OSPF on IOSV'):
+            ospf = Ospf()
+            ospf.device_attr[device_iosv].vrf_attr['default'].instance = '1'
+            ospf.device_attr[device_iosv].vrf_attr['default'].router_id = '192.168.103.2'
+            area = ospf.device_attr[device_iosv].vrf_attr['default'].area_attr[0]
+            area.area = 0
+            # area.networks.append('192.168.107.0 0.0.0.255')
+            config = ospf.build_config(devices=[device_iosv])
+            print(config)
+
+        with steps.start('configure DHCP on IOSv'):
+            example = """
+ip dhcp excluded-address 192.168.10.1 192.168.10.
+ip dhcp pool LAN_POOL
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 192.168.103.3
+ lease 0 12
+"""
+
 
 
 if __name__ == '__main__':

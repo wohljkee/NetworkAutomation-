@@ -17,7 +17,7 @@ devices:
             password: Cisco!23
 
   IOSv15:
-    os: ios
+    os: iosxe
     type: router
     credentials:
       enable:
