@@ -143,7 +143,6 @@ class TelnetConnector:
         self.execute('none', prompt=['Manage the device locally? (yes/no) [yes]:'])
         self.execute('yes', prompt=['>'])
 
-
     def disconnect(self):
         self._conn.close()
 
