@@ -1,10 +1,10 @@
 """Added docstrings for module"""
 
+import ssl
+
 from pyats import aetest
 from pyats.aetest.steps import Steps
 from pyats.topology import loader
-
-import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context
 from lib.swagger_connector import SwaggerConnector
@@ -19,13 +19,39 @@ class Example3(aetest.Testcase):
         with steps.start('Connect to FDM'):
             swagger: SwaggerConnector = device_fdm.connections.rest['class'](device_fdm)
             swagger.connect(connection=device_fdm.connections.rest)
+
+        with steps.start('Change DHCP server'):
+            dhcp_servers = swagger.client.DHCPServerContainer.getDHCPServerContainerList().result()
+            for dhcp_server in dhcp_servers['items']:
+                dhcp_server.servers = []
+                result = swagger.client.DHCPServerContainer.editDHCPServerContainer(
+                    objId=dhcp_server.id,
+                    body=dhcp_server
+                ).result()
+                print(result)
+
         with steps.start('create security zone'):
             security_zone = swagger.client.get_model('SecurityZone')
 
-
         with steps.start("configure Interface"):
-            interface = swagger.client.get_model('PhysicalInterface')
-
+            existing_object = swagger.client.Interface.getPhysicalInterfaceList().result()['items']
+            for obj in existing_object:
+                if obj.hardwareName == 'GigabitEthernet0/0':
+                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/0'].ipv4.ip.compressed
+                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/0'].ipv4.netmask.compressed
+                    obj.enabled = True
+                    obj.ipv4.dhcp = False
+                    obj.ipv4.ipType = 'STATIC'
+                elif obj.hardwareName == 'GigabitEthernet0/1':
+                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.ip.compressed
+                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.netmask.compressed
+                    obj.enabled = True
+                    obj.ipv4.dhcp = False
+                    obj.ipv4.ipType = 'STATIC'
+                else:
+                    continue
+                result = swagger.client.Interface.editPhysicalInterface(objId=obj.id, body=obj).result()
+                print(result)
 
         with steps.start('Create network object'):
             network_object = swagger.client.get_model('NetworkObject')
