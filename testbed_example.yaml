@@ -179,11 +179,16 @@ topology:
 
   FTD:
     interfaces:
-      Management0/0:
+      eth0:
         type: ethernet
         alias: mgmt
         link: ftd_mgmt
         ipv4: 192.168.110.2/24
+      Management0/0:
+        type: ethernet
+        alias: diagnostic
+        link: ftd_mgmt
+        ipv4: 192.168.111.2/24
       GigabitEthernet0/0:
         type: ethernet
         alias: to_IOU1

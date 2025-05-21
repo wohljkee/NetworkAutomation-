@@ -31,7 +31,16 @@ class Example3(aetest.Testcase):
                 print(result)
 
         with steps.start('create security zone'):
+            ref = swagger.client.get_model('ReferenceModel')
+            phy = swagger.client.Interface.getPhysicalInterfaceList().result()['items'][2]
             security_zone = swagger.client.get_model('SecurityZone')
+            sz = security_zone(
+                name='AutoCreated1',
+                mode='ROUTED',
+                interfaces=[ref(id=phy.id, name=phy.name, hardwareName=phy.hardwareName, type=phy.type)]
+            )
+            result = swagger.client.SecurityZone.addSecurityZone(body=sz).result()
+            print(result)
 
         with steps.start("configure Interface"):
             existing_object = swagger.client.Interface.getPhysicalInterfaceList().result()['items']
@@ -55,6 +64,16 @@ class Example3(aetest.Testcase):
 
         with steps.start('Create network object'):
             network_object = swagger.client.get_model('NetworkObject')
+
+        with steps.start('Deploy configuration'):
+            response = swagger.client.Deployment.addDeployment().result()
+            for _ in range(10):
+                tasks = swagger.client.Deployment.getDeployment(objId=response.id).result()
+                status = tasks['deploymentStatusMessages'][-1]
+                if status.taskState == "FINISHED":
+                    break
+            else:
+                print("Deployment failed")
 
 
 if __name__ == '__main__':
