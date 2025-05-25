@@ -9,12 +9,12 @@ devices:
       hostname: em-r1
     connections:
       telnet:
-        class: modul6.part1.telnet_connector.TelnetConnector
+        class: lib.telnet_connector.TelnetConnector
         protocol: telnet
         ip: 192.168.0.100
         port: 5022 # replaces with yours
       ssh:
-        class: modul6.part1.ssh_connector.SSHConnector
+        class: lib.ssh_connector.SSHConnector
         protocol: ssh
         ip: 192.168.11.1
         port: 22
@@ -38,13 +38,22 @@ devices:
     custom:
       hostname: em-r2
     connections:
+      rest:
+        class: lib.rest_connector.RESTConnector
+        protocol: https
+        port: 443
+        ip: 192.168.102.2
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
       telnet:
-        class: modul6.part1.telnet_connector.TelnetConnector
+        class: lib.telnet_connector.TelnetConnector
         protocol: telnet
         ip: 192.168.0.100
         port: 5053 # replaces with yours
       ssh:
-        class: modul6.part1.ssh_connector.SSHConnector
+        class: lib.ssh_connector.SSHConnector
         protocol: ssh
         ip: 192.168.102.2
         port: 22
@@ -63,7 +72,7 @@ devices:
         password: Cisco!2345
     connections:
       telnet:
-        class: modul6.part1.telnet_connector.TelnetConnector
+        class: lib.telnet_connector.TelnetConnector
         protocol: telnet
         ip: 192.168.0.100
         port: 5019 # replaces with yours
@@ -81,11 +90,35 @@ devices:
     type: ftd
     custom:
       hostname: FTD
+      dns: 192.168.106.2
     connections:
+      telnet:
+        class: lib.telnet_connector.TelnetConnector
+        prtocol: telnet
+        ip: 192.168.0.100
+        port: 5078
+        credentials:
+          login:
+            username: admin
+            password: Admin123
       ssh:
+        class: lib.ssh_connector.SSHConnector
         protocol: ssh
-        ip: 192.168.45.45 # replaces with yours
-        port: 5021 # replaces with yours
+        ip: 192.168.103.2
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco@135
+      rest:
+        class: lib.swagger_connector.SwaggerConnector
+        protocol: https
+        ip: 192.168.110.2
+        port: 443
+        credentials:
+          login:
+            username: admin
+            password: Cisco@135
 
 topology:
   IOU1:
@@ -103,6 +136,10 @@ topology:
         type: ethernet
         link: csr
         ipv4: 192.168.102.1/24
+      Ethernet0/3:
+        type: ethernet
+        link: ftd_mgmt
+        ipv4: 192.168.110.1/24
 
   CSR:
     interfaces:
@@ -142,6 +179,16 @@ topology:
 
   FTD:
     interfaces:
+      eth0:
+        type: ethernet
+        alias: mgmt
+        link: ftd_mgmt
+        ipv4: 192.168.110.2/24
+      Management0/0:
+        type: ethernet
+        alias: diagnostic
+        link: ftd_mgmt
+        ipv4: 192.168.111.2/24
       GigabitEthernet0/0:
         type: ethernet
         alias: to_IOU1
