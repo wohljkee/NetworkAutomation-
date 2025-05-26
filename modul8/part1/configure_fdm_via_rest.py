@@ -30,6 +30,35 @@ class Example3(aetest.Testcase):
                 ).result()
                 print(result)
 
+        with steps.start("configure Interface"):
+            existing_object = swagger.client.Interface.getPhysicalInterfaceList().result()['items']
+            for obj in existing_object:
+                if obj.hardwareName == 'GigabitEthernet0/0':
+                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/0'].ipv4.ip.compressed
+                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/0'].ipv4.netmask.compressed
+                    obj.enabled = True
+                    obj.ipv4.dhcp = False
+                    obj.ipv4.ipType = 'STATIC'
+                    obj.name = device_fdm.interfaces['GigabitEthernet0/0'].alias
+                elif obj.hardwareName == 'GigabitEthernet0/1':
+                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.ip.compressed
+                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.netmask.compressed
+                    obj.enabled = True
+                    obj.ipv4.dhcp = False
+                    obj.ipv4.ipType = 'STATIC'
+                    obj.name = device_fdm.interfaces['GigabitEthernet0/1'].alias
+                elif obj.hardwareName == 'GigabitEthernet0/2':
+                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/2'].ipv4.ip.compressed
+                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/2'].ipv4.netmask.compressed
+                    obj.enabled = True
+                    obj.ipv4.dhcp = False
+                    obj.ipv4.ipType = 'STATIC'
+                    obj.name = device_fdm.interfaces['GigabitEthernet0/2'].alias
+                else:
+                    continue
+                result = swagger.client.Interface.editPhysicalInterface(objId=obj.id, body=obj).result()
+                print(result)
+
         with steps.start('create security zone'):
             ref = swagger.client.get_model('ReferenceModel')
             phy = swagger.client.Interface.getPhysicalInterfaceList().result()['items'][2]
@@ -42,25 +71,17 @@ class Example3(aetest.Testcase):
             result = swagger.client.SecurityZone.addSecurityZone(body=sz).result()
             print(result)
 
-        with steps.start("configure Interface"):
-            existing_object = swagger.client.Interface.getPhysicalInterfaceList().result()['items']
-            for obj in existing_object:
-                if obj.hardwareName == 'GigabitEthernet0/0':
-                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/0'].ipv4.ip.compressed
-                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/0'].ipv4.netmask.compressed
-                    obj.enabled = True
-                    obj.ipv4.dhcp = False
-                    obj.ipv4.ipType = 'STATIC'
-                elif obj.hardwareName == 'GigabitEthernet0/1':
-                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.ip.compressed
-                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.netmask.compressed
-                    obj.enabled = True
-                    obj.ipv4.dhcp = False
-                    obj.ipv4.ipType = 'STATIC'
-                else:
-                    continue
-                result = swagger.client.Interface.editPhysicalInterface(objId=obj.id, body=obj).result()
-                print(result)
+        with steps.start('Creating Access Rule'):
+            out = swagger.client.AccessPolicy.getAccessPolicyList()
+            model = swagger.client.get_model('AccessRule')
+            res = swagger.client.AccessPolicy.addAccessRule(
+                parentId=out.result().items[0].id,
+                body=model(
+                    name='AccessRule10',
+                    ruleAction='PERMIT',
+                )
+            )
+            print(res.result())
 
         with steps.start('Create network object'):
             network_object = swagger.client.get_model('NetworkObject')
