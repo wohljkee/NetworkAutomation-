@@ -77,11 +77,45 @@ class Example3(aetest.Testcase):
             res = swagger.client.AccessPolicy.addAccessRule(
                 parentId=out.result().items[0].id,
                 body=model(
-                    name='AccessRule10',
+                    name='AccessRule',
                     ruleAction='PERMIT',
                 )
             )
             print(res.result())
+        with steps.start('Create Static Route'):
+            model = swagger.client.get_model('StaticRouteEntry')
+            ref = swagger.client.get_model('ReferenceModel')
+            no = swagger.client.NetworkObject.getNetworkObjectList().result()['items']  # for loop tbd
+            phy = swagger.client.Interface.getPhysicalInterfaceList().result()['items'][2]  # for loop tbd
+            no1 = no[0]
+            no2 = no[2]
+            st_model = model(
+                gateway=ref(
+                    id=no1.id,
+                    name=no1.name,
+                    type=no1.type
+
+                ),
+                iface=ref(
+                    id=phy.id,
+                    name=phy.name,
+                    hardwareName=phy.hardwareName,
+                    type=phy.type
+                ),
+                ipType='IPv4',
+                type='staticrouteentry',
+                networks=[ref(
+                    id=no2.id,
+                    name=no2.name,
+                    type=no2.type
+                )]
+            )
+            vrf = swagger.client.Routing.getVirtualRouterList().result()['items'][0]
+            print(vrf)
+            swagger.client.Routing.addStaticRouteEntry(
+                parentId=vrf.id,
+                body=st_model
+            )
 
         with steps.start('Create network object'):
             network_object = swagger.client.get_model('NetworkObject')
