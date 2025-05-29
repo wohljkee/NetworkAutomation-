@@ -82,6 +82,12 @@ class Example3(aetest.Testcase):
                 )
             )
             print(res.result())
+
+        with steps.start('Create network object'):
+            network_object = swagger.client.get_model('NetworkObject')
+
+
+
         with steps.start('Create Static Route'):
             model = swagger.client.get_model('StaticRouteEntry')
             ref = swagger.client.get_model('ReferenceModel')
@@ -94,7 +100,6 @@ class Example3(aetest.Testcase):
                     id=no1.id,
                     name=no1.name,
                     type=no1.type
-
                 ),
                 iface=ref(
                     id=phy.id,
@@ -117,8 +122,6 @@ class Example3(aetest.Testcase):
                 body=st_model
             )
 
-        with steps.start('Create network object'):
-            network_object = swagger.client.get_model('NetworkObject')
 
         with steps.start('Deploy configuration'):
             response = swagger.client.Deployment.addDeployment().result()
