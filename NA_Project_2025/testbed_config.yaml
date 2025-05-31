@@ -1,0 +1,365 @@
+testbed:
+  name: NetworkAutomation
+
+devices:
+  UbuntuServer:
+    os: linux
+    type: server
+    custom:
+      hostname: osboxes
+      routes:
+        to_csr:
+          network: 192.168.101.0/24
+          via: 192.168.11.2
+        to_iosv:
+          network: 192.168.102.0/24
+          via: 192.168.11.2
+        to_ftd:
+          network: 192.168.110.0/24
+          via: 192.168.11.2
+        to_docker1:
+          network: 192.168.105.0/24
+          via: 192.168.11.2
+        to_docker2:
+          network: 192.168.109.0/24
+          via: 192.168.11.2
+        to_iosv_ftd:
+          network: 192.168.107.0/24
+          via: 192.168.11.2
+        to_csr_ftd:
+          network: 192.168.106.0/24
+          via: 192.168.11.2
+        to_dns:
+          network: 192.168.108.0/24
+          via: 192.168.11.2
+    credentials:
+      default:
+        username: osboxes
+        password: osboxes.org
+    connections:
+      telnet:
+        class: connectors.telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 92.83.42.103
+        port: 5910
+        credentials:
+          login:
+            username: osboxes
+            password: osboxes.org
+      ssh:
+        protocol: ssh
+        ip: 192.168.11.2
+        port: 5093
+        credentials:
+          default:
+            username: osboxes
+            password: osboxes.org
+
+  IOU1:
+    os: ios
+    type: router
+    custom:
+      hostname: em-r1
+      routes:
+        to_server:
+          network: 192.168.11.0/24
+          via: 192.168.11.1
+        to_CSR:
+          network: 192.168.101.0/24
+          via: Ethernet0/1
+        to_IOSv:
+          network: 192.168.102.0/24
+          via: Ethernet0/2
+      rip:
+        networks:
+          - 192.168.11.0/24
+          - 192.168.101.0/24
+          - 192.168.102.0/24
+          - 192.168.110.0/24
+        passive-interfaces:
+          - Ethernet0/0
+      ospf_enabled: true
+      ospf_passive_interfaces: ['GigabitEthernet0/0'] # towards end-device UbuntuServer
+      dhcp_pools:
+        MGMT_POOL:
+          network: 192.168.110.0/24
+          default_router: 192.168.110.1
+          dns_server: 192.168.108.2
+          domain_name: local.domain
+          excluded_address_ranges:
+            - start: 192.168.110.1
+              end: 192.168.110.10
+    credentials:
+      enable:
+        password: Cisco!2345
+    connections:
+      telnet:
+        class: connectors.telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5093
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+      ssh:
+        class: connectors.ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.11.1
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+      napalm:
+        class: napalm
+        protocol: napalm
+        ip: 192.168.11.1
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+
+  CSR:
+    os: iosxe
+    type: router
+    custom:
+      hostname: em-r2
+
+      routes:
+        to_IOU1:
+          network: 192.168.101.0/24
+          via: GigabitEthernet1
+        to_server:
+          network: 192.168.11.0/24
+          via: 192.168.101.1
+      rip:
+        networks:
+          - 192.168.101.0/24
+          - 192.168.105.0/24
+          - 192.168.106.0/24
+        passive-interfaces:
+          - GigabitEthernet1
+      ospf_enabled: true
+      ospf_passive_interfaces: ['GigabitEthernet2'] # towards end-device Docker1
+      dhcp_pools:
+        guest1_POOL:
+          network: 192.168.105.0/24
+          default_router: 192.168.105.1
+          dns_server: 192.168.108.2
+          domain_name: local.domain
+          excluded_address_ranges:
+            - start: 192.168.105.1
+              end: 192.168.105.10
+    credentials:
+      enable:
+        password: Cisco!2345
+    connections:
+      rest:
+#        class: connectors.rest_connector.RESTConnector
+        protocol: https
+        port: 443
+        ip: 192.168.102.2
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+      telnet:
+        class: connectors.telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5095
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+      ssh:
+        class: connectors.ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.101.2
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+
+  IOSv:
+    os: ios
+    type: router
+    custom:
+      hostname: IOSv15
+      routes:
+        to_IOU1:
+          network: 192.168.102.0/24
+          via: GigabitEthernet0/0
+        to_server:
+          network: 192.168.11.0/24
+          via: 192.168.102.1
+      rip:
+        networks:
+          - 192.168.102.0/24
+          - 192.168.107.0/24
+          - 192.168.108.0/24
+        passive-interfaces:
+          - GigabitEthernet0/0
+      ospf_enabled: true
+      ospf_passive_interfaces: ['GigabitEthernet0/2'] # towards end-device DNS
+    credentials:
+      enable:
+        password: Cisco!2345
+    connections:
+      telnet:
+        class: connectors.telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5078
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+      ssh:
+        class: connectors.ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.102.2
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco!23
+
+  FTD:
+    os: ftd
+    type: ftd
+    custom:
+      hostname: FTD
+      dns: 192.168.108.2
+      mgmt_gw: 192.168.110.1
+      domain: none
+    credentials:
+      login:
+        password: Cisco@135
+      default:
+        username: admin
+        password: Admin123
+    connections:
+      telnet:
+        class: connectors.telnet_connector.TelnetConnector
+        protocol: telnet
+        ip: 192.168.0.100
+        port: 5008
+        credentials:
+          login:
+            username: admin
+            password: Admin123
+      ssh:
+        class: connectors.ssh_connector.SSHConnector
+        protocol: ssh
+        ip: 192.168.110.2
+        port: 22
+        credentials:
+          login:
+            username: admin
+            password: Cisco@135
+      rest:
+        class: connectors.swagger_connector.SwaggerConnector
+        protocol: https
+        ip: 192.168.110.2
+        port: 443
+        credentials:
+          login:
+            username: admin
+            password: Cisco@135
+
+topology:
+  UbuntuServer:
+    interfaces:
+      ens4:
+        alias: LAN
+        type: ethernet
+        link: to_IOU1
+        ipv4: 192.168.11.2/24
+  IOU1:
+    interfaces:
+      Ethernet0/0:
+        alias: initial
+        type: ethernet
+        link: to_ubuntu
+        ipv4: 192.168.11.1/24
+      Ethernet0/1:
+        type: ethernet
+        alias: to_csr
+        link: csr
+        ipv4: 192.168.101.1/24
+      Ethernet0/2:
+        type: ethernet
+        link: to_iosv
+        ipv4: 192.168.102.1/24
+      Ethernet0/3:
+        type: ethernet
+        link: ftd_mgmt
+        ipv4: 192.168.110.1/24
+
+  CSR:
+    interfaces:
+      GigabitEthernet1:
+        alias: initial
+        type: ethernet
+        link: to_IOU1
+        ipv4: 192.168.101.2/24
+      GigabitEthernet2:
+        type: ethernet
+        alias: to_DockerGuest1
+        link: link-docker1
+        ipv4: 192.168.105.1/24
+      GigabitEthernet3:
+        type: ethernet
+        alias: to_FTD
+        link: link-ftd3
+        ipv4: 192.168.106.1/24
+
+  IOSv:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet
+        alias: initial
+        link: link-ios15
+        ipv4: 192.168.102.2/24
+      GigabitEthernet0/1:
+        type: ethernet
+        alias: to_FTD
+        link: link-ftd2
+        ipv4: 192.168.107.1/24
+      GigabitEthernet0/2:
+        type: ethernet
+        alias: to_DNS
+        link: link-dns
+        ipv4: 192.168.108.1/24
+
+  FTD:
+    interfaces:
+      GigabitEthernet0/0:
+        type: ethernet # outside
+        alias: mgmt
+        link: ftd_mgmt
+        ipv4: 192.168.110.2/24
+#      Management0/0:
+#        type: ethernet
+#        alias: diagnostic
+#        link: ftd_mgmt
+#        ipv4: 192.168.110.2/24
+      GigabitEthernet0/2:
+        type: ethernet
+        alias: to_IOSv15
+        link: link-ftd2
+        ipv4: 192.168.107.2/24
+      GigabitEthernet0/4:
+        type: ethernet
+        alias: to_DockerGuest2
+        link: link-docker2
+        ipv4: 192.168.109.1/24
+      GigabitEthernet0/3:
+        type: ethernet
+        alias: to_CSR
+        link: link-ftd3
+        ipv4: 192.168.106.2/24
