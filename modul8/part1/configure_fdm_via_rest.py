@@ -13,7 +13,7 @@ tb = loader.load('testbed_example.yaml')
 device_fdm = tb.devices['FTD']
 
 
-class Example3(aetest.Testcase):
+class ConfigureFDM(aetest.Testcase):
     @aetest.test
     def configure_fdm_interface(self, steps: Steps):
         with steps.start('Connect to FDM'):
@@ -40,13 +40,13 @@ class Example3(aetest.Testcase):
                     obj.ipv4.dhcp = False
                     obj.ipv4.ipType = 'STATIC'
                     obj.name = device_fdm.interfaces['GigabitEthernet0/0'].alias
-                elif obj.hardwareName == 'GigabitEthernet0/1':
-                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.ip.compressed
-                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/1'].ipv4.netmask.compressed
+                elif obj.hardwareName == 'GigabitEthernet0/2':
+                    obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/2'].ipv4.ip.compressed
+                    obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/2'].ipv4.netmask.compressed
                     obj.enabled = True
                     obj.ipv4.dhcp = False
                     obj.ipv4.ipType = 'STATIC'
-                    obj.name = device_fdm.interfaces['GigabitEthernet0/1'].alias
+                    obj.name = device_fdm.interfaces['GigabitEthernet0/2'].alias
                 elif obj.hardwareName == 'GigabitEthernet0/2':
                     obj.ipv4.ipAddress.ipAddress = device_fdm.interfaces['GigabitEthernet0/2'].ipv4.ip.compressed
                     obj.ipv4.ipAddress.netmask = device_fdm.interfaces['GigabitEthernet0/2'].ipv4.netmask.compressed
@@ -82,12 +82,6 @@ class Example3(aetest.Testcase):
                 )
             )
             print(res.result())
-
-        with steps.start('Create network object'):
-            network_object = swagger.client.get_model('NetworkObject')
-
-
-
         with steps.start('Create Static Route'):
             model = swagger.client.get_model('StaticRouteEntry')
             ref = swagger.client.get_model('ReferenceModel')
@@ -100,6 +94,7 @@ class Example3(aetest.Testcase):
                     id=no1.id,
                     name=no1.name,
                     type=no1.type
+
                 ),
                 iface=ref(
                     id=phy.id,
@@ -122,6 +117,8 @@ class Example3(aetest.Testcase):
                 body=st_model
             )
 
+        with steps.start('Create network object'):
+            network_object = swagger.client.get_model('NetworkObject')
 
         with steps.start('Deploy configuration'):
             response = swagger.client.Deployment.addDeployment().result()
